@@ -1,21 +1,22 @@
 # NFT-P1
 
 
-# Key Features
+# 🎨 Decentralized NFT Art Platform
 
+## 🚀 Key Features
 
-NFT Creation – Each artwork gets a unique NFT.
+- **NFT Creation** – Each artwork gets a unique NFT.
+- **Photo Storage** – Images are stored permanently on **Arweave**.
+- **Metadata Storage** – Tracks details such as:
+  - Title
+  - Artist
+  - Creation date
+  - Ownership history
+- **Ownership Tracking** – The NFT acts as proof of authenticity and ownership.
 
-Photo Storage – Store an image of the artwork on Arweave.
+## 🛠 Tech Stack
 
-Metadata Storage – Track details like title, artist, creation date, and ownership history.
-
-Ownership Tracking – The NFT serves as proof of authenticity and ownership.
-Tech Stack
-
-Blockchain: Solana
-
-Storage: Arweave (for long-term storage)
-Smart Contracts: Rust (Solana)
-
-Frontend: TypeScript
+- **Blockchain:** Solana  
+- **Storage:** Arweave (for long-term storage)  
+- **Smart Contracts:** Rust (Solana)  
+- **Frontend:** TypeScript  
