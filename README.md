@@ -1,7 +1,9 @@
 # NFT-P1
 
 
-Key Features
+# Key Features
+
+
 NFT Creation – Each artwork gets a unique NFT.
 Photo Storage – Store an image of the artwork on IPFS or Arweave.
 Metadata Storage – Track details like title, artist, creation date, and ownership history.
