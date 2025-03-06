@@ -3,14 +3,15 @@ import { ethers } from 'ethers';
 import { Container, Typography, Box, AppBar, Toolbar, Button, TextField, IconButton } from '@mui/material';
 import { LineChart } from '@mui/x-charts/LineChart';
 import SearchIcon from '@mui/icons-material/Search';
-import ArtworkCard from './components/ArtworkCard';
+import ArtworkCard from './components/ArtworkCard'; // Assuming this is also .tsx
 import contractABI from './contract/ArtworkNFT.json';
 
+const contractAddress = '0xYourDeployedContractAddress'; // Replace with your actual contract address
+
 const App: React.FC = () => {
-  const contractAddress = '0xYourDeployedContractAddress'; // Replace with your address
-  const [currentOwner, setCurrentOwner] = useState('Loading...');
-  const [salePrice, setSalePrice] = useState('Loading...');
-  const [saleDate, setSaleDate] = useState('Loading...');
+  const [currentOwner, setCurrentOwner] = useState<string>('Loading...');
+  const [salePrice, setSalePrice] = useState<string>('Loading...');
+  const [saleDate, setSaleDate] = useState<string>('Loading...');
   const [chartData, setChartData] = useState<{ dates: string[]; prices: number[] }>({
     dates: [],
     prices: [],
@@ -19,6 +20,7 @@ const App: React.FC = () => {
 
   const loadArtworkData = async (tokenId: number = 1) => {
     if (!window.ethereum) {
+      console.log('No Ethereum provider detected');
       alert('Please install MetaMask or another Web3 wallet!');
       setCurrentOwner('No wallet detected');
       setSalePrice('N/A');
@@ -30,12 +32,25 @@ const App: React.FC = () => {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new ethers.Contract(contractAddress, contractABI.abi, provider);
 
-      const saleHistory: any[] = await contract.getSaleHistory(tokenId);
-      const formattedHistory = saleHistory.map((sale: any) => ({
+      console.log('Fetching sale history for tokenId:', tokenId);
+      const saleHistory = (await contract.getSaleHistory(tokenId)) as any[];
+      console.log('Raw sale history:', saleHistory);
+
+      if (saleHistory.length === 0) {
+        console.log('No sale history found');
+        setCurrentOwner('No sales yet');
+        setSalePrice('N/A');
+        setSaleDate('N/A');
+        return;
+      }
+
+      const formattedHistory = saleHistory.map((sale) => ({
         price: Number(ethers.formatEther(sale.price)),
-        owner: sale.owner,
+        owner: sale.owner as string,
         date: new Date(Number(sale.date) * 1000).toLocaleDateString(),
       }));
+
+      console.log('Formatted history:', formattedHistory);
 
       setChartData({
         dates: formattedHistory.map((sale) => sale.date),
@@ -48,7 +63,7 @@ const App: React.FC = () => {
       setSaleDate(latestSale.date);
     } catch (error) {
       console.error('Error fetching data:', error);
-      setCurrentOwner('Error');
+      setCurrentOwner('Error fetching data');
       setSalePrice('N/A');
       setSaleDate('N/A');
     }
@@ -61,7 +76,7 @@ const App: React.FC = () => {
     }
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
-      const accounts = await provider.send('eth_requestAccounts', []);
+      const accounts = (await provider.send('eth_requestAccounts', [])) as string[];
       setWalletAddress(accounts[0]);
     } catch (error) {
       console.error('Wallet connection failed:', error);
@@ -74,7 +89,6 @@ const App: React.FC = () => {
 
   return (
       <>
-        {/* Toolbar */}
         <AppBar position="static" sx={{ bgcolor: '#1976d2' }}>
           <Toolbar>
             <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
@@ -96,18 +110,18 @@ const App: React.FC = () => {
                   ),
                 }}
             />
-            <Button
-                variant="contained"
-                color="secondary"
-                onClick={connectWallet}
-            >
+            <Button variant="contained" color="secondary" onClick={connectWallet}>
               {walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'Connect Wallet'}
             </Button>
           </Toolbar>
         </AppBar>
 
-        {/* Main Content */}
         <Container maxWidth="lg" sx={{ py: 4 }}>
+          {/* Debugging: Static text to ensure rendering */}
+          <Typography variant="h1" color="red">
+            Hello, World!
+          </Typography>
+
           <Typography variant="h3" align="center" gutterBottom>
             Artwork #1
           </Typography>
