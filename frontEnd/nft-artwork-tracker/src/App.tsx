@@ -119,7 +119,6 @@ const App: React.FC = () => {
         <Container maxWidth="lg" sx={{ py: 4 }}>
           {/* Debugging: Static text to ensure rendering */}
           <Typography variant="h1" color="red">
-            Hello, World!
           </Typography>
 
           <Typography variant="h3" align="center" gutterBottom>
